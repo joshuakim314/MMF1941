@@ -1,0 +1,179 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath, amsthm, amssymb, mathtools, graphicx, float, multicol, array,}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+\title{MMF1941H: Stochastic Analysis - Assignment \#1}
+\author{Joshua (Ha Rim) Kim}
+\maketitle
+
+
+
+\begin{problem}{1}
+    Show that for $K \in \R$
+    \begin{align*}
+        \begin{split}
+            \E((X - K)^+) = \varphi(K) - K(1 - \Phi(K))
+        \end{split}
+    \end{align*}
+    holds where $\varphi$ is the pdf of the standard normal distribution and $\Phi$ the respective cdf.
+\end{problem}
+
+\begin{proof}[Solution]
+    Let $f_K (X) = (X - K)^+$. Given that $X \sim \mathcal{N}(0, 1)$ is a standard normal random variable
+    \begin{align*}
+        \begin{split}
+            \E(f_K (X)) = \E((X - K)^+) &= \int_{-\infty}^{\infty} (x - K)^+ \varphi(x) dx = \int_{K}^{\infty} (x - K) \varphi(x) dx \\
+            &= \int_{K}^{\infty} x \varphi(x) dx - K{\int_{K}^{\infty} \varphi(x) dx} \\
+            &= \int_{K}^{\infty} -\varphi^\prime(x) dx - K(1 - \Phi(K)) \\
+            &= \left. -\varphi(x) \right\rvert_{x = K}^{\infty} - K(1 - \Phi(K)) \\
+            &= \varphi(K) - K(1 - \Phi(K)). \\
+        \end{split}
+    \end{align*}
+\end{proof}
+
+
+
+\begin{problem}{2}
+    Use the previous result to show that analytically
+    \begin{align*}
+        v = \sigma_X \varphi{\left(\frac{K - \mu_X}{\sigma_X}\right)} - (K - \mu_X) \left(1 - \Phi{\left(\frac{K - \mu_X}{\sigma_X}\right)}\right)
+    \end{align*}
+    holds.
+\end{problem}
+    
+\begin{proof}[Solution]
+    \begin{align*}
+        (\mu_X + \sigma_X X - K)^+ &= (\sigma_X X - (K - \mu_X))^+ \\
+        &= \left(\sigma_X {\left(X - \frac{K - \mu_X}{\sigma_X}\right)}\right)^+ \\
+        &= \sigma_X {\left(X - \frac{K - \mu_X}{\sigma_X}\right)^+} \\
+        &= \sigma_X f_{K^\prime} (X) \\
+    \end{align*}
+    where $K^\prime = \frac{K - \mu_X}{\sigma_X}$. Given that $v = \E \left((\mu_X + \sigma_X X - K)^+\right)$
+    \begin{alignat*}{2}
+        v &= \E((\sigma_X f_{K^\prime} (X))) = \sigma_X \E(f_{K^\prime} (X)) && \qquad (\text{by linearity of expectation}) \\
+        &= \sigma_X {(\varphi(K^\prime) - K^\prime(1 - \Phi(K^\prime)))} \\
+        &= \sigma_X {\left(\varphi\left(\frac{K - \mu_X}{\sigma_X}\right) - \frac{K - \mu_X}{\sigma_X}\left(1 - \Phi\left(\frac{K - \mu_X}{\sigma_X}\right)\right)\right)} \\
+        &= \sigma_X \varphi\left(\frac{K - \mu_X}{\sigma_X}\right) - (K - \mu_X)\left(1 - \Phi\left(\frac{K - \mu_X}{\sigma_X}\right)\right) \\
+    \end{alignat*}
+\end{proof}
+
+
+
+\begin{problem}{3}
+    For a parameter $a \in \R$ we can define a measure $\Q_a$ via the definition
+    \begin{align*}
+        \begin{split}
+            \Q_a (A) = \E{\left(1_A \frac{\exp(aX)}{\E(\exp(aX))}\right)}.
+        \end{split}
+    \end{align*}
+    For $x \in \R$ calculate the $\Q_a (X \leq x)$ and conclude that under $\Q_a$, $X$ again follows a normal distribution and determine its parameters.
+\end{problem}
+    
+\begin{proof}[Solution]
+    Using the knowledge of moment generating functions (mgf), $\E(\exp(aX)) = m_X(a) = \exp{\left(\frac{1}{2} a^2\right)}$ where $m_X$ is the mgf of $X$. Then
+    \begin{align*}
+        \Q_a(X \leq x) &= \E \left(1_{X \leq x} \, \frac{\exp{(aX)}}{\exp{(\frac{1}{2}a^2)}}\right) \\
+        &= \E \left(1_{X \leq x} \, \exp{\left(aX - \frac{1}{2}a^2\right)}\right) \\
+        &= \int_{-\infty}^{x} \exp{\left(as - \frac{1}{2}s^2\right)} \varphi(s) ds \\
+        &= \int_{-\infty}^{x} \exp{\left(as - \frac{1}{2}s^2\right)} \frac{1}{\sqrt{2\pi}} \exp{\left(-\frac{1}{2}s^2\right)} ds \\
+        &= \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}} \exp{\left(-\frac{1}{2}(s^2 - 2as + a^2)\right)} ds \\
+        &= \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}} \exp{\left(-\frac{1}{2}(s - a)^2\right)} ds \\
+        &= \Phi{(x - a)}
+    \end{align*}
+    which is the cdf of $\mathcal{N}(a, 1)$. Therefore $X \overset{\Q_a}{\sim} \mathcal{N}(a, 1)$.
+\end{proof}
+
+
+
+\begin{problem}{4}
+    Write Python code to simulate the option value 1000 times under the measure $mathbb{P}$ with a sample size of 5000 simulations each for $\mu_X = 2.5$, $\sigma_X^2 = 4$, and $K = 6$.
+    Share the code and provide a histogram of the results.
+    Also calculate the exact value analytically per the above formula.
+\end{problem}
+    
+\begin{proof}[Solution]
+    The exact option value calculated analytically, up to 6 decimal places, is $v = 0.032348$.
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.5\linewidth]{value_hist.png}
+            \caption{\textit{histogram of 1000 simulated option value under $\mathbb{P}$}}
+            \label{fig:value_hist}
+        \end{center}
+    \end{figure}
+    
+\end{proof}
+
+
+
+\begin{problem}{5}
+    Calculate the sample variance for your previous exxperiment.
+\end{problem}
+    
+\begin{proof}[Solution]
+    The sample variance is $s = 8.56136 \times 10^{-6}$.
+\end{proof}
+
+
+
+\begin{problem}{6}
+    Note that for any $a$ the option value can be re-written as
+    \begin{align*}
+        v = \E_{\Q_a} \left(\frac{d\mathbb{P}}{d\Q_a} (\mu_X + \sigma_X X - K)^+\right)
+    \end{align*}
+    which mathematically will yield the same answer for any $a$. Define
+    \begin{align*}
+        g(a) = \E_{\Q_a} \left( \left(\frac{d\mathbb{P}}{d\Q_a} (\mu_X + \sigma_X X - K)^+\right)^2 \right)
+    \end{align*}
+    which can be evaluated through MC simulation given the fact the distribution of $X$ under the measure $\Q_a$ is known.
+    Write Python code to plot the function $g(a)$ for the above selection of parameters and $a \in [0, 5]$.
+\end{problem}
+    
+\begin{proof}[Solution]
+    The minimum of $g$ is attained at $a = 2.475$.
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.5\linewidth]{g_a.png}
+            \caption{\textit{values of $g(a)$ for $a \in [0, 5]$}}
+            \label{fig:g_a}
+        \end{center}
+    \end{figure}
+\end{proof}
+
+
+
+\begin{problem}{7}
+    Determine the minimum of the function $g$ numerically (and approximately) from the prior plot and repeat the experiment of simulating the option value but now calculated through
+    \begin{align*}
+        v = \E_{\Q_a^*} \left(\frac{d\mathbb{P}}{d\Q_a^*} (\mu_X + \sigma_X X - K)^+\right)
+    \end{align*}
+    - where $g$ attains its minimum at $a^*$ - 1000 times with a sample size of 5000 simulations each and again determine the sample variance.
+    Plot the histogram of this experiment again.
+\end{problem}
+    
+\begin{proof}[Solution]
+    Using $a^* = 2.475$, the sample variance is $s = 1.90081 \times 10^{-7}$.
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.5\linewidth]{value_hist_is.png}
+            \caption{\textit{histogram of 1000 simulated option value using importance sampling under $\Q_a^*$}}
+            \label{fig:value_hist_is}
+        \end{center}
+    \end{figure}
+\end{proof}
+
+
+
+
+\end{document}
