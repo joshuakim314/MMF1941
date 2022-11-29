@@ -1,0 +1,304 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath, amsthm, amssymb, mathtools, graphicx, float, multicol, array, mathpazo, hyperref, sectsty}
+
+\makeatletter
+
+\paragraphfont{\normalfont\underline}
+\setlength\parindent{0pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=red,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+\title{MMF1941H: Stochastic Analysis - Assignment \#2}
+\author{Joshua (Ha Rim) Kim}
+\maketitle
+
+
+
+\begin{problem}{1}
+    Calculate $\mathbb{P}(D_i)$ for $i = 1, \ldots, N$ and $\E(L)$.
+\end{problem}
+
+\begin{proof}[Solution]
+    Let $W \sim \mathcal{N}(0, 1)$ be standard normally distributed and $U \sim unif[0,1]$ be uniformly distributed between 0 and 1.
+    Since $\sqrt{\rho} Z + \sqrt{1 - \rho} X_i \sim \mathcal{N}(0, \rho + (1 - \rho)) ~ \mathcal{N}(0,1) \sim W$,
+    \begin{align*}
+        \mathbb{P}(D_i) &= \mathbb{P}(\sqrt{\rho} Z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p)) \\
+        &= \mathbb{P}(W \leq \Phi^{-1}(p)) \\
+        &= \mathbb{P}(\Phi(W) \leq p) \\
+        &= \mathbb{P}(U \leq p) \\
+        &= p.
+    \end{align*}
+\end{proof}
+
+
+
+\begin{problem}{2}
+    Calculate $p(Z) \coloneq \E(1_{D_i} \mid Z)$ for $i = 1, \ldots, N$.
+\end{problem}
+
+\begin{proof}[Solution]
+    For a given value of $Z = z$,
+    \begin{align*}
+        p(Z = z) &= \E(1_{D_i} \mid Z = z) \\
+        &= \E \left( 1_{\{ \sqrt{\rho} Z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \mid Z = z \right) \\
+        &= \E \left( 1_{\{ \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \right) \\
+        &= \mathbb{P} \left( \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \right) \\
+        &= \mathbb{P} \left( X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \\
+        &= \mathbb{P} \left( \Phi(X_i) \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
+        &= \mathbb{P} \left( U \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
+        &= \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right).
+    \end{align*}
+    Thus,
+    \begin{align*}
+        p(Z) &= \Phi \left( \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) = \Phi(V)
+    \end{align*}
+    where we define a random variable $V = \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}}$ for conciseness.
+\end{proof}
+
+
+
+\begin{problem}{3}
+    Using the explicit form of $p(Z)$ and the results from Question 2 in Revision Question Set 5, calculate $\E(p(Z))$.
+\end{problem}
+
+\begin{proof}[Solution]
+    The results from Question 2 in Revision Question Set 5 state that for $X \sim \mathcal{N}(0,1)$, 
+    \begin{align*}
+        \E \left( \Phi(aX + b) \right) = \Phi \left( \frac{b}{\sqrt{1 + a^2}} \right).
+    \end{align*}
+    Then,
+    \begin{align*}
+        \E \left( p(Z) \right) &= \E \left( \Phi \left( \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) = \E \left( \Phi \left( -\frac{\sqrt{\rho}}{\sqrt{1 - \rho}}Z + \frac{\Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
+        &= \Phi \left( \frac{\frac{\Phi^{-1}(p)}{\sqrt{1 - \rho}}}{\sqrt{1 + \frac{\rho}{1 - \rho}}} \right) = \Phi \left( \frac{\frac{\Phi^{-1}(p)}{\sqrt{1 - \rho}}}{\frac{1}{\sqrt{1 - \rho}}} \right) = \Phi \left( \Phi^{-1}(p) \right) \\
+        &= p.
+    \end{align*}
+\end{proof}
+
+
+
+\begin{problem}{4}
+    Calculate the partial derivative $\frac{\partial}{\partial \rho} p(Z)$ explicitly.
+\end{problem}
+
+\begin{proof}[Solution]
+    \begin{align*}
+        \frac{\partial}{\partial \rho} p(Z) &= \frac{\partial}{\partial \rho} \Phi(V) = \phi(V) \frac{\partial}{\partial \rho} V \\
+        &= \phi(V) \cdot \frac{\frac{-Z}{2 \sqrt{\rho}} \cdot \sqrt{1 - \rho} - (-\sqrt{\rho} Z + \Phi^{-1}(p)) \cdot \frac{-1}{2 \sqrt{1 - \rho}} }{1 - \rho} \\
+        &= \phi(V) \cdot \frac{-(1 - \rho)Z - \rho Z + \sqrt{\rho}\Phi^{-1}(p)}{2 (1 - \rho) \sqrt{\rho (1 - \rho)}} \\
+        &= \phi(V) \cdot \frac{-Z + \sqrt{\rho}\Phi^{-1}(p)}{2 (1 - \rho) \sqrt{\rho (1 - \rho)}} \\
+        &= \phi \left( \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \cdot \frac{-Z + \sqrt{\rho}\Phi^{-1}(p)}{2 (1 - \rho) \sqrt{\rho (1 - \rho)}} \\
+    \end{align*}
+    where $\phi = \Phi'$ is the pdf of a standard normal distribution.
+\end{proof}
+
+
+
+\begin{problem}{5}
+    For $k = 0, \ldots, N$ calculate $\E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right)$.
+\end{problem}
+
+\begin{proof}[Solution]
+    Invoking the factorization lemma, for a given value of $Z = z$
+    \begin{align*}
+        f(Z = z) &= \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z =z \right) = \E \left( 1_{\{NL = k\}} \mid Z = z \right) \\
+        &= \E \left( 1_{\{\sum_{i = 1}^{N} 1_{D_i} = k\}} \mid Z = z \right) \\
+        &= \E \left( 1_{\{\sum_{i = 1}^{N} 1_{\{ \sqrt{\rho} Z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} = k\}} \mid Z = z \right) \\
+        &= \E \left( 1_{\{\sum_{i = 1}^{N} 1_{\{ \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} = k\}} \right) \\
+        &= \mathbb{P} \left( \sum_{i = 1}^{N} 1_{\{ \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} = k \right) = \mathbb{P} \left( \sum_{i = 1}^{N} 1_{\{ X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \}} = k \right). \\
+    \end{align*}
+    We define a random variable $I_i = 1_{\{ X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \}}$. 
+    Then $I_i$ are i.i.d. such that $\mathbb{P}(I_i = 1) = p(Z = z) = 1 - \mathbb{P}(I_i = 0)$.
+    Hence $\sum_{i = 1}^{N} I_i = Bin(N, p(Z = z))$ is a binomial distribution with
+    \begin{align*}
+        \mathbb{P} \left( \sum_{i = 1}^{N} I_i = k \right) = \binom{N}{k} p(Z = z)^k \left( 1 - p(Z = z) \right)^{N-k}
+    \end{align*}
+    for $k = 0, \ldots, N$. Now returning back to the derivation of $f(Z = z)$,
+    \begin{align*}
+        f(Z = z) &= \mathbb{P} \left( \sum_{i = 1}^{N} 1_{\{ X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \}} = k \right) \\
+        &= \mathbb{P} \left( \sum_{i = 1}^{N} I_i = k \right) \\
+        &= \binom{N}{k} p(Z = z)^k \left( 1 - p(Z = z) \right)^{N-k}.
+    \end{align*}
+    Hence,
+    \begin{align*}
+        \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) &= f(Z) = \binom{N}{k} p(Z)^k \left( 1 - p(Z) \right)^{N-k} \\
+        &= \binom{N}{k} \Phi \left( \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right)^k \left( 1 - \Phi \left( \frac{-\sqrt{\rho} Z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right)^{N-k}.
+    \end{align*}
+\end{proof}
+
+
+
+\begin{problem}{6}
+    For $k = 0, \ldots, N$ calculate
+    \begin{align} \tag{3} \label{eqn:partial_expectation}
+        \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right).
+    \end{align}
+\end{problem}
+
+\begin{proof}[Solution]
+    We divide the problem into 3 cases:
+
+    \paragraph{Case 1:} $k = 1, \ldots, N-1$
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) &= \binom{N}{k} \left[ k p(Z)^{k-1} \left( \frac{\partial}{\partial \rho} p(Z) \right) (1 - p(Z))^{N-k} \right. \\
+        & \qquad \qquad \quad + \left. (N-k) (1 - p(Z))^{N-k-1} \left( -\frac{\partial}{\partial \rho} p(Z) \right) p(Z)^k \right] \\
+        &= \binom{N}{k} \left[ \frac{k}{p(Z)} p(Z)^k (1 - p(Z))^{N-k} - \frac{N-k}{1 - p(Z)} p(Z)^k (1 - p(Z))^{N-k} \right] \frac{\partial}{\partial \rho} p(Z) \\
+        &= \binom{N}{k} p(Z)^k (1 - p(Z))^{N-k} \left[ \frac{k}{p(Z)} - \frac{N-k}{1 - p(Z)} \right] \frac{\partial}{\partial \rho} p(Z) \\
+        &= \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) \left[ \frac{k}{p(Z)} - \frac{N-k}{1 - p(Z)} \right] \frac{\partial}{\partial \rho} p(Z).
+    \end{align*}
+
+    \paragraph{Case 2:} $k = 0$
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) &= \frac{\partial}{\partial \rho} (1 - p(Z))^N = N (1 - p(Z))^{N-1} \left( -\frac{\partial}{\partial \rho} p(Z) \right) \\
+        &= -\frac{N}{1 - p(Z)} (1 - p(Z))^N \frac{\partial}{\partial \rho} p(Z)
+    \end{align*}
+    which is equivalent to the final expression from \textit{Case 1} with $k = 0$.
+
+    \paragraph{Case 3:} $k = N$
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) &= \frac{\partial}{\partial \rho} p(Z)^N = N p(Z)^{N-1} \frac{\partial}{\partial \rho} p(Z) \\
+        &= \frac{N}{p(Z)} p(Z)^N \frac{\partial}{\partial \rho} p(Z)
+    \end{align*}
+    which is equivalent to the final expression from \textit{Case 1} with $k = N$.
+
+    Hence the general solution, for $k = 0, \ldots, N$, can be expressed as:
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) &= \E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right) \left[ \frac{k}{p(Z)} - \frac{N-k}{1 - p(Z)} \right] \frac{\partial}{\partial \rho} p(Z)
+    \end{align*}
+    where $p(Z)$, $\frac{\partial}{\partial \rho} p(Z)$, and $\E \left( 1_{\{L = \frac{k}{N}\}} \mid Z \right)$ are solutions to \textit{Problem 2}, \textit{4}, and \textit{5} respectively.
+\end{proof}
+
+
+
+\begin{problem}{7}
+    Show first that for a random variable $Y$ taking values in $\N_0$
+    \begin{align} \tag{4} \label{eqn:expectation_min}
+        \E(\min(Y, k)) = k + \sum_{j=0}^{k-1} (j-k) \mathbb{P}(Y = j)
+    \end{align}
+    holds for fixed $k \in \N$.
+\end{problem}
+
+\begin{proof}[Solution]
+    Since $\min(Y, k) = Y \cdot 1_{\{Y < k\}} + k \cdot 1_{\{Y \geq k\}}$,
+    \begin{align*}
+        \E(\min(Y, k)) &= \E(Y \cdot 1_{\{Y < k\}}) + \E(k \cdot 1_{\{Y \geq k\}}) \\
+        &= \left( \sum_{j=0}^{k-1} j \cdot \mathbb{P}(Y = j) \right) + k \cdot \E[1_{\{Y \geq k\}}] = \left( \sum_{j=0}^{k-1} j \cdot \mathbb{P}(Y = j) \right) + k \cdot \left( 1 - \E[1_{\{Y < k\}}] \right) \\
+        &= \left( \sum_{j=0}^{k-1} j \cdot \mathbb{P}(Y = j) \right) + k \cdot \left( 1 - \sum_{j=0}^{k-1} \mathbb{P}(Y = j) \right) \\
+        &= k + \sum_{j=0}^{k-1} (j-k) \mathbb{P}(Y = j).
+    \end{align*}
+\end{proof}
+
+
+
+\begin{problem}{8}
+    Fixing the parameters $p = 0.05$, $K = 0.08$, and $N = 100$, write Python code to calculate $\ell(K; \rho)$ by simulating 5000 outcomes of $Z$, leveraging formula (\ref{eqn:expectation_min}).
+    Provide the codoe and plot $\ell(K; \rho)$ for $\rho \in [0,1]$.
+    For $\rho = 0$ the result can be calculated exactly, provide this exact result.
+\end{problem}
+
+\begin{proof}[Solution]
+    Since $\E(\E(\min(L, K) \mid Z)) = \frac{1}{N} \E(\E(\min(NL, NK) \mid Z))$, we are interested in determining an expression for $\E(\min(NL, NK) \mid Z)$.
+    Invoking the factorization lemma and using the result from \textit{Problem 7}, for a given value of $Z = z$
+    \begin{align*}
+        g(Z = z) &= \E(\min(NL, NK) \mid Z = z) = \E(\min(NL, NK) \mid Z = z) \\
+        &= \E \left( \min \left(\sum_{i=0}^N 1_{D_i}, NK \right) \mid Z = z \right) = \E \left( \min \left(\sum_{i=0}^N I_i, NK \right) \right) \\
+        &= NK + \sum_{j=0}^{NK-1} (j-NK) \mathbb{P}\left( \sum_{i=0}^N I_i = j \right) \\
+        &= NK + \sum_{j=0}^{NK-1} (j-NK) \binom{N}{j} p(Z = z)^j \left( 1 - p(Z = z) \right)^{N-j} \\
+        &= NK + \sum_{j=0}^{NK-1} (j-NK) \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z = z \right) \\
+    \end{align*}
+    where $I_i = 1_{\{ X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \}}$ as defined in \textit{Problem 5}. Hence,
+    \begin{align*}
+        \E(\min(NL, NK) \mid Z) &= g(Z) = NK + \sum_{j=0}^{NK-1} (j-NK) \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right)
+    \end{align*}
+    where $\E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right)$ is the solution to \textit{Problem 5} with $k = j$. 
+    
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.75\linewidth]{first_loss.png}
+            \caption{\textit{first-loss amount $\ell(K;\rho)$ for $\rho \in [0, 1]$, calculated by simulating 5000 outcomes of $Z$}}
+            \label{fig:first_loss}
+        \end{center}
+    \end{figure}
+    
+    For the special case when $\rho = 0$,
+    \begin{align*}
+        \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right) &= \binom{N}{j} \Phi \left( \Phi^{-1}(p) \right)^j \left( 1 - \Phi \left( \Phi^{-1}(p) \right) \right)^{N-j} = \binom{N}{j} p^j (1 - p)^{N-j}
+    \end{align*}
+    and the first-loss amount when $\rho = 0$ is:
+    \begin{align*}
+        \ell(K; \rho = 0) &= \E(\E(\min(L, K) \mid Z)) = \frac{1}{N}\E(\E(\min(NL, NK) \mid Z)) \\
+        &= \frac{1}{N}\E \left( NK + \sum_{j=0}^{NK-1} (j-NK) \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right) \right) \\
+        &= \frac{1}{N}\E \left( NK + \sum_{j=0}^{NK-1} (j-NK) \binom{N}{j} p^j (1 - p)^{N-j} \right) \\
+        &= K + \frac{1}{N} \sum_{j=0}^{NK-1} (j-NK) \binom{N}{j} p^j (1 - p)^{N-j}.
+    \end{align*}
+    Using Python, the exact value calculated analytically, up to 6 decimal places, is $\ell(K; \rho = 0) = 0.048909$.
+\end{proof}
+
+
+
+\begin{problem}{9}
+    Extend the previous simulation result to also include the \textit{correlation risk} $\frac{\partial}{\partial \rho} \ell(K; \rho)$ in the simulation, utilising
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \ell(K; \rho) = \E \left( \frac{\partial}{\partial \rho} \E(\min(L, K) \mid Z) \right)
+    \end{align*}
+    and using the explicit form established in (\ref{eqn:partial_expectation}).
+    Plot the correlation risk for $\rho \in [0,1]$.
+\end{problem}
+
+\begin{proof}[Solution]
+    \begin{align*}
+        \frac{\partial}{\partial \rho} \ell(K;\rho) &= \E \left( \frac{\partial}{\partial \rho} \E(\min(L, K) \mid Z) \right) = \frac{1}{N} \E \left( \frac{\partial}{\partial \rho} \E(\min(NL, NK) \mid Z) \right) \\
+        &= \frac{1}{N} \E \left[ \frac{\partial}{\partial \rho} \left( NK + \sum_{j=0}^{NK-1} (j-NK) \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right) \right) \right] \\
+        &= \frac{1}{N} \E \left[ \sum_{j=0}^{NK-1} (j-NK) \frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right) \right]
+    \end{align*}
+    where $\frac{\partial}{\partial \rho} \E \left( 1_{\{L = \frac{j}{N}\}} \mid Z \right)$ is the solution to \textit{Problem 6} with $k = j$.
+
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.75\linewidth]{corr_risk.png}
+            \caption{\textit{correlation risk value $\frac{\partial}{\partial \rho} \ell(K;\rho)$ for $\rho \in [0, 1]$, calculated by simulating 5000 outcomes of $Z$}}
+            \label{fig:corr_risk}
+        \end{center}
+    \end{figure}
+\end{proof}
+
+
+
+\begin{problem}{10}
+    Finally, we are aiming to validate the prior result for the correlation risk against re-calculating the value under a small perturbation of $\rho$, i.e. $\frac{\partial}{\partial \rho} \ell(K; \rho) \approx \frac{1}{\epsilon} (\ell(K; \rho + \varepsilon) - \ell(K; \rho))$ for small values of $\varepsilon$.
+    Extend your Monte Carlo simulation to include this ``bump-and-reval'' correlation risk and include this result in the plot as a comparison against the previously calculated risk.
+\end{problem}
+
+\begin{proof}[Solution]
+    Using $\epsilon = 10^{-6}$ as the perturbation, the following is the ``bump-and-reval'' simulation result.
+    
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.75\linewidth]{bnr.png}
+            \caption{\textit{correlation risk value $\frac{\partial}{\partial \rho} \ell(K;\rho)$ for $\rho \in [0, 1]$, calculated using ``bump-and-reval'' method}}
+            \label{fig:bnr}
+        \end{center}
+    \end{figure}
+\end{proof}
+
+
+
+\end{document}
