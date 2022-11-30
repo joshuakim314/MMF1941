@@ -47,6 +47,12 @@
         &= \mathbb{P}(U \leq p) \\
         &= p.
     \end{align*}
+    Using this result,
+    \begin{align*}
+        \E(L) &= \E \left(\frac{1}{N} \sum_{i=1}^N 1_{D_i} \right) = \frac{1}{N} \sum_{i=1}^{N} \E(1_{D_i}) \\
+        &= \frac{1}{N} \sum_{i=1}^{N} \mathbb{P}(D_i) = \frac{1}{N} N p \\
+        &= p
+    \end{align*}
 \end{proof}
 
 
@@ -59,12 +65,9 @@
     For a given value of $Z = z$,
     \begin{align*}
         p(Z = z) &= \E(1_{D_i} \mid Z = z) \\
-        &= \E \left( 1_{\{ \sqrt{\rho} Z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \mid Z = z \right) \\
-        &= \E \left( 1_{\{ \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \right) \\
-        &= \mathbb{P} \left( \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \right) \\
-        &= \mathbb{P} \left( X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \\
-        &= \mathbb{P} \left( \Phi(X_i) \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
-        &= \mathbb{P} \left( U \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
+        &= \E \left( 1_{\{ \sqrt{\rho} Z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \mid Z = z \right) = \E \left( 1_{\{ \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \}} \right) \\
+        &= \mathbb{P} \left( \sqrt{\rho} z + \sqrt{1 - \rho} X_i \leq \Phi^{-1}(p) \right) = \mathbb{P} \left( X_i \leq \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \\
+        &= \mathbb{P} \left( \Phi(X_i) \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) = \mathbb{P} \left( U \leq \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right) \right) \\
         &= \Phi \left( \frac{-\sqrt{\rho} z + \Phi^{-1}(p)}{\sqrt{1 - \rho}} \right).
     \end{align*}
     Thus,
